@@ -22,7 +22,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yye-EC-PLL">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yye-EC-PLL">
                                 <rect key="frame" x="279" y="100" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -70,11 +70,14 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tt9-gx-RYP">
+                                <rect key="frame" x="279" y="559" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="yye-EC-PLL" secondAttribute="bottom" constant="479" id="ZxR-vm-WvH"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="bottomLeftLabel" destination="DgX-CJ-Qao" id="mhb-hA-09w"/>
@@ -83,12 +86,18 @@
                         <outlet property="middleLeftLabel" destination="tvJ-Ie-VCi" id="uBb-MI-97c"/>
                         <outlet property="middleMiddleLabel" destination="2hu-hI-ehZ" id="nKP-PD-VCa"/>
                         <outlet property="middleRightLabel" destination="6rK-pn-p5K" id="aeE-vo-iph"/>
+                        <outlet property="playerLabel" destination="Tt9-gx-RYP" id="kOQ-oD-PTM"/>
                         <outlet property="topLeftLabel" destination="TFK-RG-4Ez" id="tda-eJ-hZn"/>
-                        <outlet property="topMiddleLable" destination="yye-EC-PLL" id="5uT-fj-No8"/>
+                        <outlet property="topMiddleLabel" destination="yye-EC-PLL" id="Zbh-y4-f12"/>
                         <outlet property="topRightLabel" destination="dqH-Pd-mCh" id="0Af-V7-cy4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="kat-Hu-ucn">
+                    <connections>
+                        <action selector="onLabelTapped:" destination="vXZ-lx-hvc" id="cae-Ay-uev"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
         </scene>
     </scenes>
