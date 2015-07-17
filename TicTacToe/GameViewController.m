@@ -21,6 +21,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *playerLabel;
 @property NSString *currentPlayer;
 @property NSString *whoWon;
+@property (weak, nonatomic) IBOutlet UILabel *timeRemaining;
+@property int timerDisplay;
+@property NSTimer *timer;
 
 
 @end
@@ -52,6 +55,9 @@
     self.bottomRightLabel.layer.borderWidth = 3.0;
     
     self.playerLabel.text = @"X";
+    self.timerDisplay = 10;
+    self.timeRemaining.text = @"Time Remaining: 10";
+    [self startTimer];
 
 }
 
@@ -95,6 +101,30 @@
     return selectedLabel;
 
 }
+
+- (void) startTimer {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(onTick) userInfo:nil repeats: YES];
+    }
+
+- (void) onTick {
+    if (self.timerDisplay > 0) {
+        self.timerDisplay -=1;
+    self.timeRemaining.text = [NSString stringWithFormat:@"Time Remaining: %i", self.timerDisplay];
+    } else {
+        [self.timer invalidate];
+        UIAlertController *lostTurnAlert = [UIAlertController alertControllerWithTitle:@"Too Slow!" message:[NSString stringWithFormat:@"You lost your turn"] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [lostTurnAlert addAction:okAction];
+        [self presentViewController: lostTurnAlert animated:YES completion:nil];
+        self.currentPlayer = [self currentPlayerMark];
+        self.playerLabel.text = self.currentPlayer;
+        
+    }
+}
+
+
 #pragma mark -Game Logic Methods
 
 -(BOOL) didThePlayerWin {
@@ -141,6 +171,8 @@
     self.bottomMiddleLabel.text = nil;
     self.bottomRightLabel.text = nil;
     self.playerLabel.text = @"X";
+    [self startTimer];
+    self.timeRemaining.text =@"Time Remaining: 10";
 
     
 }
@@ -184,6 +216,94 @@
     }
 }
 
+-(void) playerTurn {
+    
+    
+    
+    if ([self.currentPlayer isEqualToString:@"X"] && [self isLabelEmpty:labelPressed]) {
+        if (labelPressed == self.topLeftLabel) {
+            self.topLeftLabel.text = @"X";
+            self.topLeftLabel.textColor = [UIColor blueColor];
+            
+        } else if (labelPressed == self.topMiddleLabel) {
+            self.topMiddleLabel.text = @"X";
+            self.topMiddleLabel.textColor = [UIColor blueColor];
+            
+        } else if (labelPressed == self.topRightLabel){
+            self.topRightLabel.text = @"X";
+            self.topRightLabel.textColor = [UIColor blueColor];
+            
+        } else if (labelPressed == self.middleLeftLabel) {
+            self.middleLeftLabel.text = @"X";
+            self.middleLeftLabel.textColor = [UIColor blueColor];
+            
+        } else if (labelPressed == self.middleMiddleLabel) {
+            self.middleMiddleLabel.text = @"X";
+            self.middleMiddleLabel.textColor = [UIColor blueColor];
+            
+        } else if (labelPressed == self.middleRightLabel) {
+            self.middleRightLabel.text = @"X";
+            self.middleRightLabel.textColor = [UIColor blueColor];
+            
+        } else if (labelPressed == self.bottomLeftLabel) {
+            self.bottomLeftLabel.text = @"X";
+            self.bottomLeftLabel.textColor = [UIColor blueColor];
+            
+        } else if (labelPressed == self.bottomMiddleLabel) {
+            self.bottomMiddleLabel.text = @"X";
+            self.bottomMiddleLabel.textColor = [UIColor blueColor];
+            
+        } else if (labelPressed == self.bottomRightLabel) {
+            self.bottomRightLabel.text = @"X";
+            self.bottomRightLabel.textColor = [UIColor blueColor];
+        }
+        
+        self.currentPlayer = [self currentPlayerMark];
+        
+    } else if ([self.currentPlayer isEqualToString:@"O"] && [self isLabelEmpty:labelPressed]) {
+        
+        if (labelPressed == self.topLeftLabel) {
+            self.topLeftLabel.text = @"O";
+            self.topLeftLabel.textColor = [UIColor redColor];
+            
+        } else if (labelPressed == self.topMiddleLabel){
+            self.topMiddleLabel.text = @"O";
+            self.topMiddleLabel.textColor = [UIColor redColor];
+            
+        } else if (labelPressed == self.topRightLabel) {
+            self.topRightLabel.text = @"O";
+            self.topRightLabel.textColor = [UIColor redColor];
+            
+        } else if (labelPressed == self.middleLeftLabel) {
+            self.middleLeftLabel.text = @"O";
+            self.middleLeftLabel.textColor = [UIColor redColor];
+            
+        } else if (labelPressed == self.middleMiddleLabel) {
+            self.middleMiddleLabel.text = @"O";
+            self.middleMiddleLabel.textColor = [UIColor redColor];
+            
+        } else if (labelPressed == self.middleRightLabel) {
+            self.middleRightLabel.text = @"O";
+            self.middleRightLabel.textColor = [UIColor redColor];
+            
+        } else if (labelPressed == self.bottomLeftLabel) {
+            self.bottomLeftLabel.text = @"O";
+            self.bottomLeftLabel.textColor = [UIColor redColor];
+            
+        } else if (labelPressed == self.bottomMiddleLabel) {
+            self.bottomMiddleLabel.text = @"O";
+            self.bottomMiddleLabel.textColor = [UIColor redColor];
+            
+        } else if (labelPressed == self.bottomRightLabel) {
+            self.bottomRightLabel.text = @"O";
+            self.bottomRightLabel.textColor = [UIColor redColor];
+        }
+        self.currentPlayer = [self currentPlayerMark];
+    }
+
+    
+}
+
 
 #pragma mark -gesture Methods
 
@@ -220,8 +340,6 @@
     }
     
     
-    
-    
 //    if (gesture.state == UIGestureRecognizerStateBegan && ) {
 //        
 //        
@@ -234,8 +352,6 @@
 //    }
     
 }
-
-
 
 - (IBAction)onLabelTapped:(UITapGestureRecognizer *)sender {
     CGPoint tappedPoint = [sender locationInView:self.view];

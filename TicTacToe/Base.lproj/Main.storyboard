@@ -86,6 +86,12 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Time remaining" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fMA-do-6L8">
+                                <rect key="frame" x="28" y="69" width="265" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -102,6 +108,7 @@
                         <outlet property="middleMiddleLabel" destination="2hu-hI-ehZ" id="nKP-PD-VCa"/>
                         <outlet property="middleRightLabel" destination="6rK-pn-p5K" id="aeE-vo-iph"/>
                         <outlet property="playerLabel" destination="Tt9-gx-RYP" id="kOQ-oD-PTM"/>
+                        <outlet property="timeRemaining" destination="fMA-do-6L8" id="ZxU-IY-8M0"/>
                         <outlet property="topLeftLabel" destination="TFK-RG-4Ez" id="tda-eJ-hZn"/>
                         <outlet property="topMiddleLabel" destination="yye-EC-PLL" id="Zbh-y4-f12"/>
                         <outlet property="topRightLabel" destination="dqH-Pd-mCh" id="0Af-V7-cy4"/>
@@ -119,7 +126,7 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="186.66666666666666" y="453.45333333333332"/>
+            <point key="canvasLocation" x="186" y="453"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
