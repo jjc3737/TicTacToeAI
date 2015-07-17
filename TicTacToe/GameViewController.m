@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeRemaining;
 @property int timerDisplay;
 @property NSTimer *timer;
+@property int currentTurn;
 
 
 @end
@@ -58,6 +59,7 @@
     self.timerDisplay = 10;
     self.timeRemaining.text = @"Time Remaining: 10";
     [self startTimer];
+    self.currentTurn = 1;
 
 }
 
@@ -124,8 +126,6 @@
         [self presentViewController: lostTurnAlert animated:YES completion:nil];
         self.currentPlayer = [self currentPlayerMark];
         self.playerLabel.text = self.currentPlayer;
-        
-        
     }
 }
 
@@ -167,6 +167,8 @@
         return YES;
     }
 }
+
+
 
 -(void) clearGameBoard {
     self.topRightLabel.text = nil;
@@ -245,9 +247,25 @@
         self.timeRemaining.text = @"Time Remaining: 10";
         self.timerDisplay = 10;
         [self startTimer];
+        if ((self.currentTurn == 9) && ![self didThePlayerWin]) {
+            self.timeRemaining.hidden = YES;
+            UIAlertController *resultAlert = [UIAlertController alertControllerWithTitle:@"Game Result" message:[NSString stringWithFormat:@"It's a tie :("] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *newGameAction = [UIAlertAction actionWithTitle:@"Start New Game" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self dismissViewControllerAnimated:YES completion:nil];
+                self.timeRemaining.hidden = NO;
+                [self clearGameBoard];
+                
+            }];
+            [resultAlert addAction:newGameAction];
+            [self presentViewController: resultAlert animated:YES completion:nil];
+                
+        }
+        
+        
     } else {
         return;
     }
+    self.currentTurn += 1;
 }
 
 
