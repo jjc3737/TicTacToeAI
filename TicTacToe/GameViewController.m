@@ -50,6 +50,8 @@
     self.bottomMiddleLabel.layer.borderWidth = 3.0;
     self.bottomRightLabel.layer.borderColor = [UIColor grayColor].CGColor;
     self.bottomRightLabel.layer.borderWidth = 3.0;
+    
+    self.playerLabel.text = @"X";
 
 }
 
@@ -138,13 +140,102 @@
     self.bottomLeftLabel.text = nil;
     self.bottomMiddleLabel.text = nil;
     self.bottomRightLabel.text = nil;
-    self.playerLabel.text = nil;
+    self.playerLabel.text = @"X";
 
     
 }
 
+-(NSString *) currentPlayerMark {
+    if ([self.currentPlayer isEqualToString:@"X"]) {
+        return @"O";
+    } else {
+        return @"X";
+    }
+}
+
+-(NSString *) currentPlayerLabelMark {
+    if ([self.currentPlayer isEqualToString:@"X"]) {
+        return @"X";
+    } else {
+        return @"O";
+    }
+}
+
+-(void) whoWonTicTacToe {
+    
+
+    if ([self didThePlayerWin]) {
+        NSString *whichPlayerWon = nil;
+        
+        if ([self.currentPlayer isEqualToString:@"X"]) {
+            whichPlayerWon = @"O";
+            
+        } else {
+            whichPlayerWon =@"X";
+        }
+        
+        UIAlertController *resultAlert = [UIAlertController alertControllerWithTitle:@"Game Result" message:[NSString stringWithFormat:@"Congratulations player %@", whichPlayerWon] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *newGameAction = [UIAlertAction actionWithTitle:@"Start New Game" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            [self clearGameBoard];
+        }];
+        [resultAlert addAction:newGameAction];
+        [self presentViewController: resultAlert animated:YES completion:nil];
+    }
+}
+
 
 #pragma mark -gesture Methods
+
+- (IBAction)panHandler:(UIPanGestureRecognizer *)gesture {
+    [gesture setMinimumNumberOfTouches:1];
+    [gesture setMaximumNumberOfTouches:1];
+    
+    CGPoint originalPlayerLabelPoint = self.playerLabel.center;
+    
+    CGPoint currentPanPoint = [gesture locationInView:self.view];
+    
+    if (CGRectContainsPoint(self.playerLabel.frame, currentPanPoint)) {
+        self.playerLabel.center = currentPanPoint;
+    }
+    
+    if (gesture.state == UIGestureRecognizerStateEnded) {
+        UILabel *currentPannedToLabel = nil;
+        currentPannedToLabel = [self findLabelUsingPoint:currentPanPoint];
+        
+
+        if (currentPannedToLabel == nil) {
+             self.playerLabel.center = originalPlayerLabelPoint;
+        } else if ([self isLabelEmpty:currentPannedToLabel]) {
+            currentPannedToLabel.text = self.currentPlayer;
+             self.playerLabel.center = originalPlayerLabelPoint;
+        } else {
+             self.playerLabel.center = originalPlayerLabelPoint;
+        }
+        
+        self.currentPlayer = [self currentPlayerMark];
+        self.playerLabel.text = [self currentPlayerLabelMark];
+        [self whoWonTicTacToe];
+        
+    }
+    
+    
+    
+    
+//    if (gesture.state == UIGestureRecognizerStateBegan && ) {
+//        
+//        
+//        if (!CGRectContainsPoint(self.playerLabel.frame, currentPanPoint))  {
+//            return;
+//        } else {
+//            if (gesture.state == UIGestureRecognizerStateChanged) {
+//            }
+//            
+//    }
+    
+}
+
+
 
 - (IBAction)onLabelTapped:(UITapGestureRecognizer *)sender {
     CGPoint tappedPoint = [sender locationInView:self.view];
@@ -191,7 +282,7 @@
                 self.bottomRightLabel.textColor = [UIColor blueColor];
             }
             
-            self.currentPlayer = @"O";
+            self.currentPlayer = [self currentPlayerMark];
             
         } else if ([self.currentPlayer isEqualToString:@"O"] && [self isLabelEmpty:labelPressed]) {
             
@@ -231,37 +322,21 @@
                 self.bottomRightLabel.text = @"O";
                 self.bottomRightLabel.textColor = [UIColor redColor];
             }
-            self.currentPlayer = @"X";
+            self.currentPlayer = [self currentPlayerMark];
         }
         
-        if ([self.currentPlayer isEqualToString:@"X"]) {
-            self.playerLabel.text = @"X";
-        } else {
-            self.playerLabel.text = @"O";
-        }
+        
+        
+        self.playerLabel.text = [self currentPlayerLabelMark];
     
     
-        if ([self didThePlayerWin]) {
-            NSString *whichPlayerWon = nil;
-            
-            if ([self.currentPlayer isEqualToString:@"X"]) {
-                whichPlayerWon = @"O";
-                
-            } else {
-                whichPlayerWon =@"X";
-            }
-            
-            UIAlertController *resultAlert = [UIAlertController alertControllerWithTitle:@"Game Result" message:[NSString stringWithFormat:@"Congratulations player %@", whichPlayerWon] preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *newGameAction = [UIAlertAction actionWithTitle:@"Start New Game" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [self dismissViewControllerAnimated:YES completion:nil];
-                [self clearGameBoard];
-            }];
-            [resultAlert addAction:newGameAction];
-            [self presentViewController: resultAlert animated:YES completion:nil];
-        }
+        [self whoWonTicTacToe];
     
     } else {
         return;
     }
+    
+    
+    
 }
 @end
