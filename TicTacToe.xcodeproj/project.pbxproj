@@ -86,11 +86,8 @@
 			children = (
 				14A18D7F1B584715007668E6 /* AppDelegate.h */,
 				14A18D801B584715007668E6 /* AppDelegate.m */,
-				14A18D821B584715007668E6 /* GameViewController.h */,
-				14A18D831B584715007668E6 /* GameViewController.m */,
+				3F1F19C91B5AB73300D8898D /* View Conrtoller */,
 				14A18D851B584715007668E6 /* Main.storyboard */,
-				3F1F19901B58A5BF00D8898D /* WebViewController.h */,
-				3F1F19911B58A5BF00D8898D /* WebViewController.m */,
 				14A18D881B584715007668E6 /* Images.xcassets */,
 				14A18D8A1B584715007668E6 /* LaunchScreen.xib */,
 				14A18D7B1B584715007668E6 /* Supporting Files */,
@@ -122,6 +119,17 @@
 				14A18D961B584715007668E6 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3F1F19C91B5AB73300D8898D /* View Conrtoller */ = {
+			isa = PBXGroup;
+			children = (
+				14A18D821B584715007668E6 /* GameViewController.h */,
+				14A18D831B584715007668E6 /* GameViewController.m */,
+				3F1F19901B58A5BF00D8898D /* WebViewController.h */,
+				3F1F19911B58A5BF00D8898D /* WebViewController.m */,
+			);
+			name = "View Conrtoller";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
