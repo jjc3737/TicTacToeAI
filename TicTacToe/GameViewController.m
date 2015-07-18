@@ -19,12 +19,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *bottomMiddleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bottomRightLabel;
 @property (weak, nonatomic) IBOutlet UILabel *playerLabel;
-@property NSString *currentPlayer;
+@property NSString *currentPlayerSymbol;
 @property NSString *whoWon;
 @property (weak, nonatomic) IBOutlet UILabel *timeRemaining;
 @property int timerDisplay;
 @property NSTimer *timer;
 @property int currentTurn;
+@property NSTimer *computerTurnTimer;
+@property NSArray *labelArrays;
 
 
 @end
@@ -33,7 +35,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.currentPlayer = @"X";
+    self.currentPlayerSymbol = @"X";
     self.whoWon = @"No one has won this game";
     
     self.topLeftLabel.layer.borderColor = [UIColor grayColor].CGColor;
@@ -60,7 +62,8 @@
     self.timeRemaining.text = @"Time Remaining: 10";
     [self startTimer];
     self.currentTurn = 1;
-
+    
+    self.labelArrays = [NSArray arrayWithObjects: self.topLeftLabel, self.topMiddleLabel, self.topRightLabel, self.middleLeftLabel, self.middleMiddleLabel, self.middleRightLabel, self.bottomLeftLabel, self. bottomMiddleLabel, self. bottomRightLabel, nil];
 }
 
 #pragma mark -Label Methods
@@ -120,12 +123,13 @@
             self.timeRemaining.text = @"Time Remainging: 10";
             self.timerDisplay = 10;
             [self startTimer];
+            [self computerTurnDelayTimer];
             
         }];
         [lostTurnAlert addAction:okAction];
         [self presentViewController: lostTurnAlert animated:YES completion:nil];
-        self.currentPlayer = [self currentPlayerMark];
-        self.playerLabel.text = self.currentPlayer;
+        self.currentPlayerSymbol = [self currentPlayerMark];
+        self.playerLabel.text = self.currentPlayerSymbol;
     }
 }
 
@@ -150,6 +154,7 @@
     
     
 }
+
 
 -(BOOL) isTheLineWinningCombinationForLabels: (UILabel *)firstLabel Label: (UILabel *)secondLabel  Label: (UILabel *)thirdLabel   {
     if ([firstLabel.text isEqualToString:secondLabel.text] && [secondLabel.text isEqualToString:thirdLabel.text]) {
@@ -184,12 +189,14 @@
     [self startTimer];
     self.timeRemaining.text =@"Time Remaining: 10";
     self.timerDisplay = 10;
+    self.currentTurn = 1;
+    
 
     
 }
 
 -(NSString *) currentPlayerMark {
-    if ([self.currentPlayer isEqualToString:@"X"]) {
+    if ([self.currentPlayerSymbol isEqualToString:@"X"]) {
         return @"O";
     } else {
         return @"X";
@@ -197,7 +204,7 @@
 }
 
 -(NSString *) currentPlayerLabelMark {
-    if ([self.currentPlayer isEqualToString:@"X"]) {
+    if ([self.currentPlayerSymbol isEqualToString:@"X"]) {
         return @"X";
     } else {
         return @"O";
@@ -211,7 +218,7 @@
         self.timeRemaining.hidden = YES;
         NSString *whichPlayerWon = nil;
         
-        if ([self.currentPlayer isEqualToString:@"X"]) {
+        if ([self.currentPlayerSymbol isEqualToString:@"X"]) {
             whichPlayerWon = @"O";
             
         } else {
@@ -233,43 +240,93 @@
 
 -(void) playerTurn: (UILabel *) playerClickLabel {
     if ([self isLabelEmpty:playerClickLabel]) {
-        if ([self.currentPlayer isEqualToString:@"X"]) {
-            playerClickLabel.text =@"X";
-            playerClickLabel.textColor = [UIColor blueColor];
-        } else {
-            playerClickLabel.text =@"O";
-            playerClickLabel.textColor = [UIColor redColor];
-        }
-        self.currentPlayer = [self currentPlayerMark];
+      
+        playerClickLabel.text =@"X";
+        playerClickLabel.textColor = [UIColor blueColor];
+        
+        self.currentPlayerSymbol = [self currentPlayerMark];
         self.playerLabel.text = [self currentPlayerLabelMark];
         [self whoWonTicTacToe];
         [self.timer invalidate];
+        self.timeRemaining.hidden = YES;
         self.timeRemaining.text = @"Time Remaining: 10";
         self.timerDisplay = 10;
-        [self startTimer];
-        if ((self.currentTurn == 9) && ![self didThePlayerWin]) {
-            self.timeRemaining.hidden = YES;
-            UIAlertController *resultAlert = [UIAlertController alertControllerWithTitle:@"Game Result" message:[NSString stringWithFormat:@"It's a tie :("] preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *newGameAction = [UIAlertAction actionWithTitle:@"Start New Game" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [self dismissViewControllerAnimated:YES completion:nil];
-                self.timeRemaining.hidden = NO;
-                [self clearGameBoard];
-                
-            }];
-            [resultAlert addAction:newGameAction];
-            [self presentViewController: resultAlert animated:YES completion:nil];
-                
+        [self checkForTie];
+        [self computerTurnDelayTimer];
+        
+        if (self.currentTurn == 9) {
+            [self.computerTurnTimer invalidate];
         }
+      
         
         
     } else {
         return;
     }
     self.currentTurn += 1;
+    
+   
+    
+}
+
+-(void) computerTurnDelayTimer {
+     self.computerTurnTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(computerTurn) userInfo:nil repeats: NO];
+}
+
+-(void) computerTurn {
+    
+   
+    NSMutableArray *emptyLabelsArray = [[NSMutableArray alloc] initWithCapacity:self.labelArrays.count];
+    int whichEmptyLabel = arc4random_uniform(9 - self.currentTurn);
+    
+    for (int i =0; i < self.labelArrays.count; i++) {
+        if ([self isLabelEmpty:[self.labelArrays objectAtIndex:i]]) {
+            [emptyLabelsArray addObject:[self.labelArrays objectAtIndex:i]];
+        }
+    }
+    
+    [self settingComputerText: [emptyLabelsArray objectAtIndex:whichEmptyLabel]];
+    
+    [self startTimer];
+    [self whoWonTicTacToe];
+    self.timeRemaining.hidden = NO;
+    [self checkForTie];
+    self.currentTurn += 1;
+    self.timeRemaining.text = @"Time Remaining: 10";
+    self.timerDisplay = 10;
+    self.currentPlayerSymbol = [self currentPlayerMark];
+    self.playerLabel.text = [self currentPlayerLabelMark];
+    if (self.currentTurn == 9) {
+        [self.computerTurnTimer invalidate];
+    }
+   
+    
+
+}
+
+-(void) settingComputerText: (UILabel *)label {
+    label.text = @"O";
+    label.textColor = [UIColor blueColor];
+
+}
+
+-(void) checkForTie {
+    if ((self.currentTurn == 9) && ![self didThePlayerWin]) {
+        self.timeRemaining.hidden = YES;
+        UIAlertController *resultAlert = [UIAlertController alertControllerWithTitle:@"Game Result" message:[NSString stringWithFormat:@"It's a tie :("] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *newGameAction = [UIAlertAction actionWithTitle:@"Start New Game" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            self.timeRemaining.hidden = NO;
+            [self clearGameBoard];
+            
+        }];
+        [resultAlert addAction:newGameAction];
+        [self presentViewController: resultAlert animated:YES completion:nil];
+        
+    }
 }
 
 
-    
 
 
 
@@ -279,39 +336,47 @@
     [gesture setMinimumNumberOfTouches:1];
     [gesture setMaximumNumberOfTouches:1];
     
-    CGPoint originalPlayerLabelPoint = self.playerLabel.center;
+    if ([self.currentPlayerSymbol isEqualToString:@"X"]) {
     
-    CGPoint currentPanPoint = [gesture locationInView:self.view];
-    
-    if (CGRectContainsPoint(self.playerLabel.frame, currentPanPoint)) {
-        self.playerLabel.center = currentPanPoint;
-    }
-    
-    if (gesture.state == UIGestureRecognizerStateEnded) {
-        UILabel *currentPannedToLabel = nil;
-        currentPannedToLabel = [self findLabelUsingPoint:currentPanPoint];
         
-        if (currentPannedToLabel == nil) {
-            self.playerLabel.center = originalPlayerLabelPoint;
-        } else {
-            [self playerTurn:currentPannedToLabel];
+        CGPoint originalPlayerLabelPoint = self.playerLabel.center;
+        
+        CGPoint currentPanPoint = [gesture locationInView:self.view];
+        
+        if (CGRectContainsPoint(self.playerLabel.frame, currentPanPoint)) {
+            self.playerLabel.center = currentPanPoint;
         }
-
-
         
+        if (gesture.state == UIGestureRecognizerStateEnded) {
+            UILabel *currentPannedToLabel = nil;
+            currentPannedToLabel = [self findLabelUsingPoint:currentPanPoint];
+            
+            if (currentPannedToLabel == nil) {
+                self.playerLabel.center = originalPlayerLabelPoint;
+            } else {
+                [self playerTurn:currentPannedToLabel];
+            }
+        }
+    } else {
+        return;
     }
 }
 
 - (IBAction)onLabelTapped:(UITapGestureRecognizer *)sender {
-    CGPoint tappedPoint = [sender locationInView:self.view];
-    UILabel *labelPressed = [self findLabelUsingPoint:tappedPoint];
     
-    if (!([self findLabelUsingPoint:tappedPoint] == nil)) {
-        [self playerTurn:labelPressed];
-    
-       
+    if ([self.currentPlayerSymbol isEqualToString:@"X"]) {
+        CGPoint tappedPoint = [sender locationInView:self.view];
+        UILabel *labelPressed = [self findLabelUsingPoint:tappedPoint];
+        
+        if (!([self findLabelUsingPoint:tappedPoint] == nil)) {
+            [self playerTurn:labelPressed];
+        
+           
 
-    
+        
+        } else {
+            return;
+        }
     } else {
         return;
     }
