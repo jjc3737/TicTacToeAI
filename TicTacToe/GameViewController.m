@@ -120,9 +120,6 @@
         UIAlertController *lostTurnAlert = [UIAlertController alertControllerWithTitle:@"Too Slow!" message:[NSString stringWithFormat:@"You lost your turn"] preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [self dismissViewControllerAnimated:YES completion:nil];
-            self.timeRemaining.text = @"Time Remainging: 10";
-            self.timerDisplay = 10;
-            [self startTimer];
             [self computerTurnDelayTimer];
             
         }];
@@ -190,6 +187,7 @@
     self.timeRemaining.text =@"Time Remaining: 10";
     self.timerDisplay = 10;
     self.currentTurn = 1;
+    self.currentPlayerSymbol = @"X";
     
 
     
@@ -249,13 +247,13 @@
         [self whoWonTicTacToe];
         [self.timer invalidate];
         self.timeRemaining.hidden = YES;
-        self.timeRemaining.text = @"Time Remaining: 10";
-        self.timerDisplay = 10;
         [self checkForTie];
-        [self computerTurnDelayTimer];
+//        [self computerTurnDelayTimer];
         
-        if (self.currentTurn == 9) {
+        if (self.currentTurn == 9 || [self didThePlayerWin]) {
             [self.computerTurnTimer invalidate];
+        } else {
+            [self computerTurnDelayTimer];
         }
       
         
@@ -296,8 +294,11 @@
     self.timerDisplay = 10;
     self.currentPlayerSymbol = [self currentPlayerMark];
     self.playerLabel.text = [self currentPlayerLabelMark];
+ 
     if (self.currentTurn == 9) {
         [self.computerTurnTimer invalidate];
+        [self.timer invalidate];
+        
     }
    
     
