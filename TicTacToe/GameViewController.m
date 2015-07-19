@@ -53,24 +53,24 @@ typedef NS_ENUM(int, LabelIndex) {
     
     self.currentPlayer = @"player";
     
-    self.topLeftLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.topLeftLabel.layer.borderWidth = 3.0;
-    self.topMiddleLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.topMiddleLabel.layer.borderWidth = 3.0;
-    self.topRightLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.topRightLabel.layer.borderWidth = 3.0;
-    self.middleLeftLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.middleLeftLabel.layer.borderWidth = 3.0;
-    self.middleMiddleLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.middleMiddleLabel.layer.borderWidth = 3.0;
-    self.middleRightLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.middleRightLabel.layer.borderWidth = 3.0;
-    self.bottomLeftLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.bottomLeftLabel.layer.borderWidth = 3.0;
-    self.bottomMiddleLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.bottomMiddleLabel.layer.borderWidth = 3.0;
-    self.bottomRightLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.bottomRightLabel.layer.borderWidth = 3.0;
+    self.topLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.topLeftLabel.layer.borderWidth = 0.25;
+    self.topMiddleLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.topMiddleLabel.layer.borderWidth = 0.25;
+    self.topRightLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.topRightLabel.layer.borderWidth = 0.25;
+    self.middleLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.middleLeftLabel.layer.borderWidth = 0.25;
+    self.middleMiddleLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.middleMiddleLabel.layer.borderWidth = 0.25;
+    self.middleRightLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.middleRightLabel.layer.borderWidth = 0.25;
+    self.bottomLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.bottomLeftLabel.layer.borderWidth = 0.25;
+    self.bottomMiddleLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.bottomMiddleLabel.layer.borderWidth = 0.25;
+    self.bottomRightLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.bottomRightLabel.layer.borderWidth = 0.25;
     
     self.playerLabel.text = @"X";
     [self resetStartTimer];
@@ -141,7 +141,7 @@ typedef NS_ENUM(int, LabelIndex) {
 - (void) onTick {
     if (self.timerDisplay > 0) {
         self.timerDisplay -=1;
-        self.timeRemaining.text = [NSString stringWithFormat:@"Time Remaining: %i", self.timerDisplay];
+        self.timeRemaining.text = [NSString stringWithFormat:@"It's Your Turn! %i", self.timerDisplay];
     } else {
         [self.timer invalidate];
         UIAlertController *lostTurnAlert = [UIAlertController alertControllerWithTitle:@"Too Slow!" message:[NSString stringWithFormat:@"You lost your turn"] preferredStyle:UIAlertControllerStyleAlert];
@@ -160,7 +160,7 @@ typedef NS_ENUM(int, LabelIndex) {
 -(void) resetStartTimer {
     [self startTimer];
     self.timeRemaining.hidden = NO;
-    self.timeRemaining.text =@"Time Remaining: 10";
+    self.timeRemaining.text =@"It's Your Turn! 10";
     self.timerDisplay = 10;
 }
 
@@ -309,8 +309,8 @@ typedef NS_ENUM(int, LabelIndex) {
 
 -(void) settingComputerText: (UILabel *)label {
     label.text = @"O";
-    label.textColor = [[UIColor alloc] initWithRed:164.0/255 green:219.0/255 blue:253.0/255 alpha:1.0];
-    [label setFont:[UIFont fontWithName:@"AvenirNext-Bold" size:50]];
+    label.textColor = [UIColor redColor];
+
 
 }
 
