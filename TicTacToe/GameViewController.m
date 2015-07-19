@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *playerLabel;
 @property NSString *currentPlayer;
 @property (weak, nonatomic) IBOutlet UILabel *timeRemaining;
+@property (weak, nonatomic) IBOutlet UILabel *yourTurnLabel;
 @property int timerDisplay;
 @property NSTimer *timer;
 @property NSTimer *computerTurnTimer;
@@ -143,7 +144,7 @@ typedef NS_ENUM(int, LabelIndex) {
 - (void) onTick {
     if (self.timerDisplay > 0) {
         self.timerDisplay -=1;
-        self.timeRemaining.text = [NSString stringWithFormat:@"It's Your Turn! %i", self.timerDisplay];
+        self.timeRemaining.text = [NSString stringWithFormat:@"%i", self.timerDisplay];
     } else {
         [self.timer invalidate];
         UIAlertController *lostTurnAlert = [UIAlertController alertControllerWithTitle:@"Too Slow!" message:[NSString stringWithFormat:@"You lost your turn"] preferredStyle:UIAlertControllerStyleAlert];
@@ -162,8 +163,9 @@ typedef NS_ENUM(int, LabelIndex) {
 -(void) resetStartTimer {
     [self startTimer];
     self.timeRemaining.hidden = NO;
-    self.timeRemaining.text =@"It's Your Turn! 10";
-    self.timerDisplay = 10;
+    self.yourTurnLabel.hidden = NO;
+    self.timeRemaining.text =@"";
+    self.timerDisplay = 11;
 }
 
 
@@ -268,6 +270,7 @@ typedef NS_ENUM(int, LabelIndex) {
             [self thereisATie];
         } else {
             [self.timer invalidate];
+            self.yourTurnLabel.hidden = YES;
             self.timeRemaining.hidden = YES;
         
             [self computerTurnDelayTimer];
@@ -365,5 +368,11 @@ typedef NS_ENUM(int, LabelIndex) {
         return;
     }
     
+}
+
+#pragma mark  -Segue
+-(IBAction)unwindToMainMenu:(UIStoryboardSegue *)sender {
+    [self clearGameBoard];
+
 }
 @end
