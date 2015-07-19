@@ -309,7 +309,8 @@ typedef NS_ENUM(int, LabelIndex) {
 
 -(void) settingComputerText: (UILabel *)label {
     label.text = @"O";
-    label.textColor = [UIColor blueColor];
+    label.textColor = [[UIColor alloc] initWithRed:164.0/255 green:219.0/255 blue:253.0/255 alpha:1.0];
+    [label setFont:[UIFont fontWithName:@"AvenirNext-Bold" size:50]];
 
 }
 
