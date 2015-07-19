@@ -54,25 +54,27 @@ typedef NS_ENUM(int, LabelIndex) {
     self.currentPlayer = @"player";
     
     self.topLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.topLeftLabel.layer.borderWidth = 0.25;
+    self.topLeftLabel.layer.borderWidth = 0.5;
     self.topMiddleLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.topMiddleLabel.layer.borderWidth = 0.25;
+    self.topMiddleLabel.layer.borderWidth = 0.5;
     self.topRightLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.topRightLabel.layer.borderWidth = 0.25;
+    self.topRightLabel.layer.borderWidth = 0.5;
     self.middleLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.middleLeftLabel.layer.borderWidth = 0.25;
+    self.middleLeftLabel.layer.borderWidth = 0.5;
     self.middleMiddleLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.middleMiddleLabel.layer.borderWidth = 0.25;
+    self.middleMiddleLabel.layer.borderWidth = 0.5;
     self.middleRightLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.middleRightLabel.layer.borderWidth = 0.25;
+    self.middleRightLabel.layer.borderWidth = 0.5;
     self.bottomLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.bottomLeftLabel.layer.borderWidth = 0.25;
+    self.bottomLeftLabel.layer.borderWidth = 0.5;
     self.bottomMiddleLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.bottomMiddleLabel.layer.borderWidth = 0.25;
+    self.bottomMiddleLabel.layer.borderWidth = 0.5;
     self.bottomRightLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.bottomRightLabel.layer.borderWidth = 0.25;
+    self.bottomRightLabel.layer.borderWidth = 0.5;
     
     self.playerLabel.text = @"X";
+    self.playerLabel.textColor = [[UIColor alloc] initWithRed:253.0/255 green:169.0/255 blue:105.0/255 alpha:1.0];
+    [self.playerLabel setFont:[UIFont fontWithName:@"AvenirNext-Bold" size:50]];
     [self resetStartTimer];
     
     self.labelArrays = [NSArray arrayWithObjects: self.topLeftLabel, self.topMiddleLabel, self.topRightLabel, self.middleLeftLabel, self.middleMiddleLabel, self.middleRightLabel, self.bottomLeftLabel, self. bottomMiddleLabel, self. bottomRightLabel, nil];
@@ -233,7 +235,7 @@ typedef NS_ENUM(int, LabelIndex) {
     if ([self.currentPlayer isEqualToString:@"player"]) {
         return @"X";
     } else {
-        return @"O";
+        return @" ";
     }
 }
 
@@ -255,7 +257,8 @@ typedef NS_ENUM(int, LabelIndex) {
     if (!([self.ticTacToeGameLogic isBoxEmpty:self.ticTacToeGameLogic.ticTacToeBoard int:index])) {
       
         playerClickLabel.text =@"X";
-        playerClickLabel.textColor = [UIColor blueColor];
+        playerClickLabel.textColor = [[UIColor alloc] initWithRed:253.0/255 green:169.0/255 blue:105.0/255 alpha:1.0];
+        [playerClickLabel setFont:[UIFont fontWithName:@"AvenirNext-Bold" size:50]];
         self.currentPlayer = [self currentPlayerChanged];
         self.playerLabel.text = [self playerLabelText];
         
@@ -282,7 +285,7 @@ typedef NS_ENUM(int, LabelIndex) {
 -(void) computerTurn {
     
     NSMutableArray *emptyLabelsArray = [[NSMutableArray alloc] initWithCapacity:self.labelArrays.count];
-    int whichEmptyLabel = arc4random_uniform(emptyLabelsArray.count);
+    int whichEmptyLabel = arc4random_uniform((int)emptyLabelsArray.count);
     UILabel *labelComputerChose;
     
     for (int i =0; i < self.labelArrays.count; i++) {
@@ -309,7 +312,8 @@ typedef NS_ENUM(int, LabelIndex) {
 
 -(void) settingComputerText: (UILabel *)label {
     label.text = @"O";
-    label.textColor = [UIColor redColor];
+    label.textColor = [[UIColor alloc] initWithRed:164.0/255 green:219.0/255 blue:253.0/255 alpha:1.0];
+    [label setFont:[UIFont fontWithName:@"AvenirNext-Bold" size:50]];
 
 
 }
