@@ -15,6 +15,7 @@
 		14A18D8C1B584715007668E6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14A18D8A1B584715007668E6 /* LaunchScreen.xib */; };
 		14A18D981B584715007668E6 /* TicTacToeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A18D971B584715007668E6 /* TicTacToeTests.m */; };
 		3F1F19921B58A5BF00D8898D /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F19911B58A5BF00D8898D /* WebViewController.m */; };
+		3F1F19CF1B5AD25D00D8898D /* GameLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F19CE1B5AD25D00D8898D /* GameLogic.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		14A18D971B584715007668E6 /* TicTacToeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TicTacToeTests.m; sourceTree = "<group>"; };
 		3F1F19901B58A5BF00D8898D /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		3F1F19911B58A5BF00D8898D /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		3F1F19CD1B5AD25D00D8898D /* GameLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLogic.h; sourceTree = "<group>"; };
+		3F1F19CE1B5AD25D00D8898D /* GameLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLogic.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +89,8 @@
 			children = (
 				14A18D7F1B584715007668E6 /* AppDelegate.h */,
 				14A18D801B584715007668E6 /* AppDelegate.m */,
+				3F1F19CD1B5AD25D00D8898D /* GameLogic.h */,
+				3F1F19CE1B5AD25D00D8898D /* GameLogic.m */,
 				3F1F19C91B5AB73300D8898D /* View Conrtoller */,
 				14A18D851B584715007668E6 /* Main.storyboard */,
 				14A18D881B584715007668E6 /* Images.xcassets */,
@@ -234,6 +239,7 @@
 			files = (
 				14A18D841B584715007668E6 /* GameViewController.m in Sources */,
 				14A18D811B584715007668E6 /* AppDelegate.m in Sources */,
+				3F1F19CF1B5AD25D00D8898D /* GameLogic.m in Sources */,
 				14A18D7E1B584715007668E6 /* main.m in Sources */,
 				3F1F19921B58A5BF00D8898D /* WebViewController.m in Sources */,
 			);

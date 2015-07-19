@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class GameLogic;
 @interface GameViewController : UIViewController
 
 
-
+@property (strong,nonatomic)GameLogic *ticTacToeGameLogic;
 
 @end
 
