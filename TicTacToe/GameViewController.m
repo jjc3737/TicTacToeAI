@@ -218,11 +218,6 @@ typedef NS_ENUM(int, LabelIndex) {
 
 -(void) clearGameBoard {
     
-//    for (int i=0; i<9; i++) {
-//        (UILabel *)label = [self.labelArrays objectAtIndex:i];
-//        label.text = nil;
-//        
-//    }
     self.topRightLabel.text = nil;
     self.topMiddleLabel.text = nil;
     self.topLeftLabel.text = nil;
