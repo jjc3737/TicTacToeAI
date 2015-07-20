@@ -7,9 +7,47 @@
 //
 
 #import "GameLogic.h"
+@interface GameLogic ()
+@property NSArray *twoInARowIndexArrays;
 
+@end
 @implementation GameLogic
 
+
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        self.twoInARowIndexArrays = [[NSArray alloc] initWithObjects:
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:0],[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:2],[NSNumber numberWithInt:1], [NSNumber numberWithInt:0], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:0],[NSNumber numberWithInt:2], [NSNumber numberWithInt:1], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:3],[NSNumber numberWithInt:4], [NSNumber numberWithInt:5], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:5],[NSNumber numberWithInt:4], [NSNumber numberWithInt:3], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:3],[NSNumber numberWithInt:5], [NSNumber numberWithInt:4], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:6],[NSNumber numberWithInt:7], [NSNumber numberWithInt:8], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:8],[NSNumber numberWithInt:7], [NSNumber numberWithInt:6], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:6],[NSNumber numberWithInt:8], [NSNumber numberWithInt:7], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:0],[NSNumber numberWithInt:3], [NSNumber numberWithInt:6], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:6],[NSNumber numberWithInt:3], [NSNumber numberWithInt:0], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:0],[NSNumber numberWithInt:6], [NSNumber numberWithInt:3], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:1],[NSNumber numberWithInt:4], [NSNumber numberWithInt:7], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:7],[NSNumber numberWithInt:4], [NSNumber numberWithInt:1], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:1],[NSNumber numberWithInt:7], [NSNumber numberWithInt:4], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:2],[NSNumber numberWithInt:5], [NSNumber numberWithInt:8], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:8],[NSNumber numberWithInt:5], [NSNumber numberWithInt:2], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:2],[NSNumber numberWithInt:8], [NSNumber numberWithInt:5], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:0],[NSNumber numberWithInt:4], [NSNumber numberWithInt:8], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:8],[NSNumber numberWithInt:4], [NSNumber numberWithInt:0], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:0],[NSNumber numberWithInt:8], [NSNumber numberWithInt:4], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:6],[NSNumber numberWithInt:4], [NSNumber numberWithInt:2], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:2],[NSNumber numberWithInt:4], [NSNumber numberWithInt:6], nil],
+                 [NSArray arrayWithObjects:[NSNumber numberWithInt:6],[NSNumber numberWithInt:2], [NSNumber numberWithInt:4], nil], nil];
+    }
+    
+    return self;
+    
+}
 #pragma mark -The Board
 
 -(NSMutableArray *)newBoard {
@@ -98,7 +136,7 @@
         ![self isBoxEmpty:array int:6] && ![self isBoxEmpty:array int:7] &&
         ![self isBoxEmpty:array int:8]) {
         
-            return YES;
+        return YES;
     } else {
         return NO;
     }
@@ -114,6 +152,69 @@
     }
 }
 
+#pragma mark    -Computer Logic
+-(void)createWinningAndBlockingIndexArray:(NSMutableArray *)array {
+    for (int i=0; i<self.twoInARowIndexArrays.count; i++) {
+        if ([self isThereATwoInARow:array int:[[[self.twoInARowIndexArrays objectAtIndex:i] objectAtIndex:0] intValue] int:[[[self.twoInARowIndexArrays objectAtIndex:i] objectAtIndex:1] intValue] int:[[[self.twoInARowIndexArrays objectAtIndex: i] objectAtIndex:2] intValue]]) {
+            if ([[[self.twoInARowIndexArrays objectAtIndex:i] objectAtIndex:0] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+                int index = [[[self.twoInARowIndexArrays objectAtIndex:i] objectAtIndex:2] intValue];
+                [self addingToWinningIndexArray:index];
+            } else {
+                int index = [[[self.twoInARowIndexArrays objectAtIndex:i] objectAtIndex:2] intValue];
+                [self addingToBlockingIndexArray:index];
+            }
+        }
+    }
+}
+
+-(void)addingToWinningIndexArray:(int)index{
+    [self.winningIndexArray addObject:[NSNumber numberWithInt:index]];
+}
+
+-(void)addingToBlockingIndexArray:(int)index{
+    [self.blockingIndexArray addObject:[NSNumber numberWithInt:index]];
+     
+//     insertObject:[NSNumber numberWithInt:index]atIndex:0];
+    
+}
+
+
+-(BOOL)isThereATwoInARow:(NSMutableArray *)array int:(int)indexOne int:(int)indexTwo int:(int)indexThree {
+    
+    if (([array objectAtIndex:indexOne] == [array objectAtIndex:indexTwo]) && !([self isBoxEmpty:array int:indexOne]) && ([self isBoxEmpty:array int:indexThree])) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+-(int)whatIndexComputShouldMakeNextMove {
+    [self createWinningAndBlockingIndexArray:self.ticTacToeBoard];
+    int index;
+    if (!([self.winningIndexArray count] == 0)) {
+        index = [[self.winningIndexArray objectAtIndex:0] intValue];
+    } else if (!([self.blockingIndexArray count] == 0)) {
+        int lastIndex = [self.blockingIndexArray count] - 1;
+        index = [[self.blockingIndexArray objectAtIndex:lastIndex] intValue];
+    } else {
+        
+        if ([self isBoxEmpty:self.ticTacToeBoard int:4]) {
+            index = 4;
+        } else {
+            NSMutableArray *emptyIndexArray = [[NSMutableArray alloc] initWithCapacity:self.ticTacToeBoard.count];
+            for (int i =0; i < self.ticTacToeBoard.count; i++) {
+                if ([self isBoxEmpty:self.ticTacToeBoard int:i ]) {
+                    [emptyIndexArray addObject:[NSNumber numberWithInt:i]];
+                }
+            }
+            int indexRandom = arc4random_uniform((int)emptyIndexArray.count);
+            index = [[emptyIndexArray objectAtIndex:indexRandom] intValue];
+        }
+    }
+    [self.blockingIndexArray removeAllObjects];
+    return index;
+    
+}
 
 
 @end

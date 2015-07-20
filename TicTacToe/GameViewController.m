@@ -51,7 +51,8 @@ typedef NS_ENUM(int, LabelIndex) {
     self.ticTacToeGameLogic = [[GameLogic alloc] init];
     self.ticTacToeGameLogic.ticTacToeBoard = [[NSMutableArray alloc] init];
     [self.ticTacToeGameLogic newBoard];
-    
+    self.ticTacToeGameLogic.winningIndexArray = [[NSMutableArray alloc] init];
+    self.ticTacToeGameLogic.blockingIndexArray = [[NSMutableArray alloc] init];
     self.currentPlayer = @"player";
     
     self.topLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -172,6 +173,9 @@ typedef NS_ENUM(int, LabelIndex) {
 #pragma mark -Game is Over Methods
 -(void) thereIsAWinner {
         self.timeRemaining.hidden = YES;
+        self.yourTurnLabel.hidden = YES;
+        [self.ticTacToeGameLogic.winningIndexArray removeAllObjects];
+        [self.ticTacToeGameLogic.blockingIndexArray removeAllObjects];
         NSString *whoWonThisGame;
         [self.timer invalidate];
         [self.computerTurnTimer invalidate];
@@ -186,6 +190,7 @@ typedef NS_ENUM(int, LabelIndex) {
         UIAlertAction *newGameAction = [UIAlertAction actionWithTitle:@"Start New Game" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [self dismissViewControllerAnimated:YES completion:nil];
             self.timeRemaining.hidden = NO;
+            self.yourTurnLabel.hidden = NO;
             [self clearGameBoard];
         }];
         [resultAlert addAction:newGameAction];
@@ -194,6 +199,9 @@ typedef NS_ENUM(int, LabelIndex) {
 
 -(void) thereisATie {
         self.timeRemaining.hidden = YES;
+        self.yourTurnLabel.hidden = YES;
+        [self.ticTacToeGameLogic.winningIndexArray removeAllObjects];
+        [self.ticTacToeGameLogic.blockingIndexArray removeAllObjects];
         [self.timer invalidate];
         [self.computerTurnTimer invalidate];
         
@@ -251,7 +259,6 @@ typedef NS_ENUM(int, LabelIndex) {
 
 #pragma mark -Player & Computer Turns
 -(void) playerTurn: (UILabel *) playerClickLabel {
-    
     int index = [self getLabelIndex:playerClickLabel];
     [self.ticTacToeGameLogic upDateBoard:@"player" int:index];
     
@@ -287,20 +294,13 @@ typedef NS_ENUM(int, LabelIndex) {
 
 -(void) computerTurn {
     
-    NSMutableArray *emptyLabelsArray = [[NSMutableArray alloc] initWithCapacity:self.labelArrays.count];
-    int whichEmptyLabel = arc4random_uniform((int)emptyLabelsArray.count);
-    UILabel *labelComputerChose;
+    int index;
+    UILabel *label;
+    index = [self.ticTacToeGameLogic whatIndexComputShouldMakeNextMove];
+    label = [self.labelArrays objectAtIndex:index];
+    [self settingComputerText:label];
+    [self.ticTacToeGameLogic upDateBoard:@"computer" int:index];
     
-    for (int i =0; i < self.labelArrays.count; i++) {
-        if ([self.ticTacToeGameLogic isBoxEmpty:self.ticTacToeGameLogic.ticTacToeBoard int:i]) {
-            [emptyLabelsArray addObject:[self.labelArrays objectAtIndex:i]];
-        }
-    }
-    
-    labelComputerChose = [emptyLabelsArray objectAtIndex:whichEmptyLabel];
-    
-    [self.ticTacToeGameLogic upDateBoard:@"computer" int:[self getLabelIndex:labelComputerChose]];
-    [self settingComputerText: labelComputerChose];
     if (!([self.ticTacToeGameLogic whoWonTicTacToe:self.ticTacToeGameLogic.ticTacToeBoard] == nil)) {
         [self thereIsAWinner];
     } else if ([self.ticTacToeGameLogic isThereATie:self.ticTacToeGameLogic.ticTacToeBoard]) {
@@ -311,6 +311,7 @@ typedef NS_ENUM(int, LabelIndex) {
         self.currentPlayer = [self currentPlayerChanged];
         self.playerLabel.text = [self playerLabelText];
     }
+    
 }
 
 -(void) settingComputerText: (UILabel *)label {
