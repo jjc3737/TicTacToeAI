@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *playerLabel;
 @property NSString *currentPlayer;
 @property (weak, nonatomic) IBOutlet UILabel *timeRemaining;
+@property (weak, nonatomic) IBOutlet UILabel *yourTurnLabel;
 @property int timerDisplay;
 @property NSTimer *timer;
 @property NSTimer *computerTurnTimer;
@@ -50,29 +51,32 @@ typedef NS_ENUM(int, LabelIndex) {
     self.ticTacToeGameLogic = [[GameLogic alloc] init];
     self.ticTacToeGameLogic.ticTacToeBoard = [[NSMutableArray alloc] init];
     [self.ticTacToeGameLogic newBoard];
-    
+    self.ticTacToeGameLogic.winningIndexArray = [[NSMutableArray alloc] init];
+    self.ticTacToeGameLogic.blockingIndexArray = [[NSMutableArray alloc] init];
     self.currentPlayer = @"player";
     
-    self.topLeftLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.topLeftLabel.layer.borderWidth = 3.0;
-    self.topMiddleLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.topMiddleLabel.layer.borderWidth = 3.0;
-    self.topRightLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.topRightLabel.layer.borderWidth = 3.0;
-    self.middleLeftLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.middleLeftLabel.layer.borderWidth = 3.0;
-    self.middleMiddleLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.middleMiddleLabel.layer.borderWidth = 3.0;
-    self.middleRightLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.middleRightLabel.layer.borderWidth = 3.0;
-    self.bottomLeftLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.bottomLeftLabel.layer.borderWidth = 3.0;
-    self.bottomMiddleLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.bottomMiddleLabel.layer.borderWidth = 3.0;
-    self.bottomRightLabel.layer.borderColor = [UIColor grayColor].CGColor;
-    self.bottomRightLabel.layer.borderWidth = 3.0;
+    self.topLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.topLeftLabel.layer.borderWidth = 0.5;
+    self.topMiddleLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.topMiddleLabel.layer.borderWidth = 0.5;
+    self.topRightLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.topRightLabel.layer.borderWidth = 0.5;
+    self.middleLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.middleLeftLabel.layer.borderWidth = 0.5;
+    self.middleMiddleLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.middleMiddleLabel.layer.borderWidth = 0.5;
+    self.middleRightLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.middleRightLabel.layer.borderWidth = 0.5;
+    self.bottomLeftLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.bottomLeftLabel.layer.borderWidth = 0.5;
+    self.bottomMiddleLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.bottomMiddleLabel.layer.borderWidth = 0.5;
+    self.bottomRightLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.bottomRightLabel.layer.borderWidth = 0.5;
     
     self.playerLabel.text = @"X";
+    self.playerLabel.textColor = [[UIColor alloc] initWithRed:253.0/255 green:169.0/255 blue:105.0/255 alpha:1.0];
+    [self.playerLabel setFont:[UIFont fontWithName:@"AvenirNext-Bold" size:50]];
     [self resetStartTimer];
     
     self.labelArrays = [NSArray arrayWithObjects: self.topLeftLabel, self.topMiddleLabel, self.topRightLabel, self.middleLeftLabel, self.middleMiddleLabel, self.middleRightLabel, self.bottomLeftLabel, self. bottomMiddleLabel, self. bottomRightLabel, nil];
@@ -141,7 +145,7 @@ typedef NS_ENUM(int, LabelIndex) {
 - (void) onTick {
     if (self.timerDisplay > 0) {
         self.timerDisplay -=1;
-        self.timeRemaining.text = [NSString stringWithFormat:@"Time Remaining: %i", self.timerDisplay];
+        self.timeRemaining.text = [NSString stringWithFormat:@"%i", self.timerDisplay];
     } else {
         [self.timer invalidate];
         UIAlertController *lostTurnAlert = [UIAlertController alertControllerWithTitle:@"Too Slow!" message:[NSString stringWithFormat:@"You lost your turn"] preferredStyle:UIAlertControllerStyleAlert];
@@ -160,14 +164,18 @@ typedef NS_ENUM(int, LabelIndex) {
 -(void) resetStartTimer {
     [self startTimer];
     self.timeRemaining.hidden = NO;
-    self.timeRemaining.text =@"Time Remaining: 10";
-    self.timerDisplay = 10;
+    self.yourTurnLabel.hidden = NO;
+    self.timeRemaining.text =@"";
+    self.timerDisplay = 11;
 }
 
 
 #pragma mark -Game is Over Methods
 -(void) thereIsAWinner {
         self.timeRemaining.hidden = YES;
+        self.yourTurnLabel.hidden = YES;
+        [self.ticTacToeGameLogic.winningIndexArray removeAllObjects];
+        [self.ticTacToeGameLogic.blockingIndexArray removeAllObjects];
         NSString *whoWonThisGame;
         [self.timer invalidate];
         [self.computerTurnTimer invalidate];
@@ -182,6 +190,7 @@ typedef NS_ENUM(int, LabelIndex) {
         UIAlertAction *newGameAction = [UIAlertAction actionWithTitle:@"Start New Game" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [self dismissViewControllerAnimated:YES completion:nil];
             self.timeRemaining.hidden = NO;
+            self.yourTurnLabel.hidden = NO;
             [self clearGameBoard];
         }];
         [resultAlert addAction:newGameAction];
@@ -190,6 +199,9 @@ typedef NS_ENUM(int, LabelIndex) {
 
 -(void) thereisATie {
         self.timeRemaining.hidden = YES;
+        self.yourTurnLabel.hidden = YES;
+        [self.ticTacToeGameLogic.winningIndexArray removeAllObjects];
+        [self.ticTacToeGameLogic.blockingIndexArray removeAllObjects];
         [self.timer invalidate];
         [self.computerTurnTimer invalidate];
         
@@ -233,7 +245,7 @@ typedef NS_ENUM(int, LabelIndex) {
     if ([self.currentPlayer isEqualToString:@"player"]) {
         return @"X";
     } else {
-        return @"O";
+        return @" ";
     }
 }
 
@@ -247,7 +259,6 @@ typedef NS_ENUM(int, LabelIndex) {
 
 #pragma mark -Player & Computer Turns
 -(void) playerTurn: (UILabel *) playerClickLabel {
-    
     int index = [self getLabelIndex:playerClickLabel];
     [self.ticTacToeGameLogic upDateBoard:@"player" int:index];
     
@@ -255,7 +266,8 @@ typedef NS_ENUM(int, LabelIndex) {
     if (!([self.ticTacToeGameLogic isBoxEmpty:self.ticTacToeGameLogic.ticTacToeBoard int:index])) {
       
         playerClickLabel.text =@"X";
-        playerClickLabel.textColor = [UIColor blueColor];
+        playerClickLabel.textColor = [[UIColor alloc] initWithRed:253.0/255 green:169.0/255 blue:105.0/255 alpha:1.0];
+        [playerClickLabel setFont:[UIFont fontWithName:@"AvenirNext-Bold" size:50]];
         self.currentPlayer = [self currentPlayerChanged];
         self.playerLabel.text = [self playerLabelText];
         
@@ -265,6 +277,7 @@ typedef NS_ENUM(int, LabelIndex) {
             [self thereisATie];
         } else {
             [self.timer invalidate];
+            self.yourTurnLabel.hidden = YES;
             self.timeRemaining.hidden = YES;
         
             [self computerTurnDelayTimer];
@@ -281,20 +294,13 @@ typedef NS_ENUM(int, LabelIndex) {
 
 -(void) computerTurn {
     
-    NSMutableArray *emptyLabelsArray = [[NSMutableArray alloc] initWithCapacity:self.labelArrays.count];
-    int whichEmptyLabel = arc4random_uniform(emptyLabelsArray.count);
-    UILabel *labelComputerChose;
+    int index;
+    UILabel *label;
+    index = [self.ticTacToeGameLogic whatIndexComputShouldMakeNextMove];
+    label = [self.labelArrays objectAtIndex:index];
+    [self settingComputerText:label];
+    [self.ticTacToeGameLogic upDateBoard:@"computer" int:index];
     
-    for (int i =0; i < self.labelArrays.count; i++) {
-        if ([self.ticTacToeGameLogic isBoxEmpty:self.ticTacToeGameLogic.ticTacToeBoard int:i]) {
-            [emptyLabelsArray addObject:[self.labelArrays objectAtIndex:i]];
-        }
-    }
-    
-    labelComputerChose = [emptyLabelsArray objectAtIndex:whichEmptyLabel];
-    
-    [self.ticTacToeGameLogic upDateBoard:@"computer" int:[self getLabelIndex:labelComputerChose]];
-    [self settingComputerText: labelComputerChose];
     if (!([self.ticTacToeGameLogic whoWonTicTacToe:self.ticTacToeGameLogic.ticTacToeBoard] == nil)) {
         [self thereIsAWinner];
     } else if ([self.ticTacToeGameLogic isThereATie:self.ticTacToeGameLogic.ticTacToeBoard]) {
@@ -305,11 +311,14 @@ typedef NS_ENUM(int, LabelIndex) {
         self.currentPlayer = [self currentPlayerChanged];
         self.playerLabel.text = [self playerLabelText];
     }
+    
 }
 
 -(void) settingComputerText: (UILabel *)label {
     label.text = @"O";
-    label.textColor = [UIColor blueColor];
+    label.textColor = [[UIColor alloc] initWithRed:164.0/255 green:219.0/255 blue:253.0/255 alpha:1.0];
+    [label setFont:[UIFont fontWithName:@"AvenirNext-Bold" size:50]];
+
 
 }
 
@@ -360,5 +369,11 @@ typedef NS_ENUM(int, LabelIndex) {
         return;
     }
     
+}
+
+#pragma mark  -Segue
+-(IBAction)unwindToMainMenu:(UIStoryboardSegue *)sender {
+    [self clearGameBoard];
+
 }
 @end

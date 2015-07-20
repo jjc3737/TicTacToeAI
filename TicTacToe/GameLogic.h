@@ -11,6 +11,8 @@
 @interface GameLogic : NSObject
 
 @property NSMutableArray *ticTacToeBoard;
+@property NSMutableArray *winningIndexArray;
+@property NSMutableArray *blockingIndexArray;
 
 
 -(NSMutableArray *)newBoard;
@@ -21,5 +23,6 @@
 -(BOOL)isThereATie: (NSMutableArray *)array;
 -(void)upDateBoard:(NSString *)playerType int:(int)index;
 -(BOOL)isBoxEmpty:(NSMutableArray *)array int:(int)index;
+-(int)whatIndexComputShouldMakeNextMove;
 
 @end
