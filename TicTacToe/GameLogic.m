@@ -136,7 +136,9 @@
         ![self isBoxEmpty:array int:6] && ![self isBoxEmpty:array int:7] &&
         ![self isBoxEmpty:array int:8]) {
         
+        
         return YES;
+        
     } else {
         return NO;
     }

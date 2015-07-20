@@ -218,21 +218,10 @@ typedef NS_ENUM(int, LabelIndex) {
 
 -(void) clearGameBoard {
     
-    //    for (int i=0; i<9; i++) {
-    //        (UILabel *)label = [self.labelArrays objectAtIndex:i];
-    //        label.text = nil;
-    //
-    //    }
-    
-    self.topRightLabel.text = nil;
-    self.topMiddleLabel.text = nil;
-    self.topLeftLabel.text = nil;
-    self.middleRightLabel.text = nil;
-    self.middleLeftLabel.text = nil;
-    self.middleMiddleLabel.text = nil;
-    self.bottomLeftLabel.text = nil;
-    self.bottomMiddleLabel.text = nil;
-    self.bottomRightLabel.text = nil;
+   
+    for (UILabel *label in self.labelArrays) {
+        label.text = @"";
+    }
 
     [self.ticTacToeGameLogic clearBoard];
     self.playerLabel.text = @"X";
