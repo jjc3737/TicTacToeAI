@@ -261,11 +261,9 @@ typedef NS_ENUM(int, LabelIndex) {
 #pragma mark -Player & Computer Turns
 -(void) playerTurn: (UILabel *) playerClickLabel {
     int index = [self getLabelIndex:playerClickLabel];
-    [self.ticTacToeGameLogic upDateBoard:@"player" int:index];
-    
-    
-    if (!([self.ticTacToeGameLogic isBoxEmpty:self.ticTacToeGameLogic.ticTacToeBoard int:index])) {
-      
+
+    if ([self.ticTacToeGameLogic isBoxEmpty:self.ticTacToeGameLogic.ticTacToeBoard int:index]) {
+        [self.ticTacToeGameLogic upDateBoard:@"player" int:index];
         playerClickLabel.text =@"X";
         playerClickLabel.textColor = [[UIColor alloc] initWithRed:253.0/255 green:169.0/255 blue:105.0/255 alpha:1.0];
         [playerClickLabel setFont:[UIFont fontWithName:@"AvenirNext-Bold" size:50]];
