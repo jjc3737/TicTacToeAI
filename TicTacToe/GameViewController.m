@@ -10,6 +10,8 @@
 #import "GameLogic.h"
 
 @interface GameViewController ()
+
+
 @property (weak, nonatomic) IBOutlet UILabel *topLeftLabel;
 @property (weak, nonatomic) IBOutlet UILabel *topMiddleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *topRightLabel;
@@ -45,7 +47,10 @@ typedef NS_ENUM(int, LabelIndex) {
 
 @implementation GameViewController
 
+#pragma mark - VC and Life-cycle
+
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     self.ticTacToeGameLogic = [[GameLogic alloc] init];
@@ -329,10 +334,10 @@ typedef NS_ENUM(int, LabelIndex) {
             UILabel *currentPannedToLabel = nil;
             currentPannedToLabel = [self findLabelUsingPoint:currentPanPoint];
             
-            if (currentPannedToLabel == nil) {
+            if (!(currentPannedToLabel == nil)) {
+                [self playerTurn:currentPannedToLabel];
                 self.playerLabel.center = originalPlayerLabelPoint;
             } else {
-                [self playerTurn:currentPannedToLabel];
                 self.playerLabel.center = originalPlayerLabelPoint;
             }
         }

@@ -196,7 +196,7 @@
     if (!([self.winningIndexArray count] == 0)) {
         index = [[self.winningIndexArray objectAtIndex:0] intValue];
     } else if (!([self.blockingIndexArray count] == 0)) {
-        int lastIndex = [self.blockingIndexArray count] - 1;
+        int lastIndex = (int)([self.blockingIndexArray count] - 1);
         index = [[self.blockingIndexArray objectAtIndex:lastIndex] intValue];
     } else {
         
